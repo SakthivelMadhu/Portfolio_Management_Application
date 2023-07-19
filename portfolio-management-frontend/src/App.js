@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PortfolioManagerList from './components/PortfolioManagerList';
 import PortfolioManagerForm from './components/PortfolioManagerForm';
+import ProjectList from './components/ProjectList';
 import './App.css';
 
 
