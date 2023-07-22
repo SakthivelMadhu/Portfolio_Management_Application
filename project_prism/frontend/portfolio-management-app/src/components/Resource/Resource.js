@@ -9,6 +9,11 @@ const Resource = () => {
     task_id: ''
   });
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortByTaskID, setSortByTaskID] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resourcesPerPage] = useState(5);
+
   const fetchResources = async () => {
     try {
       const response = await axios.get('/api/resources');
@@ -41,6 +46,22 @@ const Resource = () => {
     }
   };
 
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSort = () => {
+    setSortByTaskID(!sortByTaskID);
+  };
+
+  // Pagination
+  const indexOfLastResource = currentPage * resourcesPerPage;
+  const indexOfFirstResource = indexOfLastResource - resourcesPerPage;
+  const currentResources = resources.slice(indexOfFirstResource, indexOfLastResource);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <h2>Resources</h2>
@@ -55,13 +76,21 @@ const Resource = () => {
         </label>
         <button type="submit">Add Resource</button>
       </form>
+      <div>
+        <input type="text" placeholder="Search by Resource Name" value={searchTerm} onChange={handleSearch} />
+        <button onClick={handleSort}>Sort by Task ID</button>
+      </div>
       <ul>
-        {resources.map((resource) => (
+        {currentResources.map((resource) => (
           <li key={resource.id}>
             <strong>{resource.name}</strong> - Task ID: {resource.task_id}
           </li>
         ))}
       </ul>
+      <div>
+        {/* Pagination */}
+      </div>
+
     </div>
   );
 };

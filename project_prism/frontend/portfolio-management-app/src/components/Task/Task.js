@@ -10,6 +10,14 @@ const Task = () => {
     project_id: ''
   });
 
+
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortByStatus, setSortByStatus] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tasksPerPage] = useState(5);
+
+
   const fetchTasks = async () => {
     try {
       const response = await axios.get('/api/tasks');
@@ -43,6 +51,24 @@ const Task = () => {
     }
   };
 
+
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSort = () => {
+    setSortByStatus(!sortByStatus);
+  };
+
+  // Pagination
+  const indexOfLastTask = currentPage * tasksPerPage;
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+  const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
   return (
     <div>
       <h2>Tasks</h2>
@@ -65,13 +91,20 @@ const Task = () => {
         </label>
         <button type="submit">Add Task</button>
       </form>
+      <div>
+        <input type="text" placeholder="Search by Task Name" value={searchTerm} onChange={handleSearch} />
+        <button onClick={handleSort}>Sort by Status</button>
+      </div>
       <ul>
-        {tasks.map((task) => (
+        {currentTasks.map((task) => (
           <li key={task.id}>
             <strong>{task.name}</strong> - {task.status} - Project ID: {task.project_id}
           </li>
         ))}
       </ul>
+      <div>
+        {/* Pagination */}
+      </div>
     </div>
   );
 };
