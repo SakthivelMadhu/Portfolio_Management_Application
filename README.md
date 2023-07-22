@@ -53,3 +53,11 @@ View a list of existing resources associated with their respective tasks.
 Pagination: The Project listing page supports pagination to view projects in smaller chunks.
 Filtering: Projects can be filtered by the Status and Portfolio Manager.
 Sorting: Projects can be sorted by Status and Start Date.
+
+# Troubleshooting
+If you encounter any issues during setup or usage, please follow these steps:
+* Ensure the backend server (app.py) is running without errors.
+* Check the browser's developer console for frontend errors.
+* Verify that the frontend makes correct API requests to the backend.
+* Double-check database connectivity and credentials.
+
