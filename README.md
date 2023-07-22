@@ -14,21 +14,31 @@ git clone https://github.com/SakthivelMadhu/Portfolio_Management_Application.git
 
 3. Backend Setup:<br>
 * Navigate to the backend directory: <br> 
-  cd project_prism/backend
+   ```bash
+   cd project_prism/backend
 * Install Python dependencies from requirements.txt:  <br>
+   ```bash
   pip install -r requirements.txt
 * Run the backend server:  <br>
-  python app.py
+  ```bash
+  python app.py  
 
 3. Frontend Setup:
 
 * Navigate to the frontend/portfolio-management-app directory: <br>
-cd project_prism/frontend/portfolio-management-app
+   ```bash
+   cd project_prism/frontend/portfolio-management-app
 * Install Node.js dependencies: <br>
-npm install
+   ```bash
+  npm install
 * Run the frontend React application: <br>
-  npm start
+   ```bash
+   npm start
+
 4. Access the application at http://localhost:3000/ in your web browser.
+
+# DataBase Diagram :
+![Screenshot 2023-07-23 020127](https://github.com/SakthivelMadhu/Portfolio_Management_Application/assets/62326876/0dfe2b18-0d99-4cde-bd4c-f62c5b3b516b)
 
 
 # Features : 
