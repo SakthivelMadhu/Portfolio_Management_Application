@@ -12,6 +12,10 @@ const PortfolioManager = () => {
     start_date: ''
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [portfolioManagersPerPage, setPortfolioManagersPerPage] = useState(5);
+
+
   const fetchPortfolioManagers = async () => {
     try {
       const response = await axios.get('/api/portfolio_managers');
@@ -46,6 +50,40 @@ const PortfolioManager = () => {
       console.error('Error adding Portfolio Manager:', error);
     }
   };
+
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+  const indexOfLastPortfolioManager = currentPage * portfolioManagersPerPage;
+  const indexOfFirstPortfolioManager = indexOfLastPortfolioManager - portfolioManagersPerPage;
+  const currentPortfolioManagers = portfolioManagers.slice(indexOfFirstPortfolioManager, indexOfLastPortfolioManager);
+
+  const totalPages = Math.ceil(portfolioManagers.length / portfolioManagersPerPage);
+
+  const handleNameFilter = (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    if (searchTerm === '') {
+      fetchPortfolioManagers(); // Reset to all portfolio managers if no filter entered
+    } else {
+      const filteredPortfolioManagers = portfolioManagers.filter((manager) =>
+        manager.name.toLowerCase().includes(searchTerm)
+      );
+      setPortfolioManagers(filteredPortfolioManagers);
+    }
+  };
+
+  const handleStartDateSort = () => {
+    const sortedPortfolioManagers = [...portfolioManagers].sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+    setPortfolioManagers(sortedPortfolioManagers);
+  };
+
+
+
 
   return (
     <div>
@@ -83,6 +121,28 @@ const PortfolioManager = () => {
           </li>
         ))}
       </ul>
+      <div>
+        <label>
+          Search by Name:
+          <input type="text" onChange={handleNameFilter} />
+        </label>
+        <button onClick={handleStartDateSort}>Sort by Start Date</button>
+      </div>
+      <ul>
+        {currentPortfolioManagers.map((manager) => (
+          <li key={manager.id}>
+            <strong>{manager.name}</strong> - {manager.status ? 'Active' : 'Inactive'} - {manager.role} - {manager.start_date}
+          </li>
+        ))}
+      </ul>
+      <div>
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Prev Page
+        </button>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next Page
+        </button>
+      </div>
     </div>
   );
 };

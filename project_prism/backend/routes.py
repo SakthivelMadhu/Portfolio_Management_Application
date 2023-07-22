@@ -86,14 +86,28 @@ class LogoutResource(Resource):
 
 class PortfolioManagerResource(Resource):
     def get(self, portfolio_manager_id=None):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, location='args')  # Add name as a query parameter
+        parser.add_argument('sort_by_start_date', type=bool, location='args')  # Add sort_by_start_date as a query parameter
+        args = parser.parse_args()
+
         if portfolio_manager_id:
             portfolio_manager = PortfolioManager.query.get(portfolio_manager_id)
             if not portfolio_manager:
                 return {'message': 'Portfolio Manager not found'}, 404
             return marshal(portfolio_manager, portfolio_manager_fields), 200
         else:
-            portfolio_managers = PortfolioManager.query.all()
+            query = PortfolioManager.query
+
+            if args['name']:
+                query = query.filter(PortfolioManager.name.ilike(f'%{args["name"]}%'))
+
+            if args['sort_by_start_date']:
+                query = query.order_by(PortfolioManager.start_date)
+
+            portfolio_managers = query.all()
             return marshal(portfolio_managers, portfolio_manager_fields), 200
+
 
     def post(self):
         parser = reqparse.RequestParser()
@@ -153,13 +167,41 @@ class PortfolioManagerResource(Resource):
 class ProjectResource(Resource):
     def get(self, project_id=None):
         if project_id:
+            # ... (previous code for getting a single project)
             project = Project.query.get(project_id)
             if not project:
                 return {'message': 'Project not found'}, 404
             return marshal(project, project_fields), 200
         else:
-            projects = Project.query.all()
-            return marshal(projects, project_fields), 200
+            # Handle pagination, filtering, and sorting for the projects listing
+            parser = reqparse.RequestParser()
+            parser.add_argument('page', type=int, default=1)
+            parser.add_argument('status', type=str)
+            parser.add_argument('sort', type=str, default='id')  # Default sort by project ID
+            args = parser.parse_args()
+
+            per_page = 10  # Number of projects to display per page
+            offset = (args['page'] - 1) * per_page
+            query = Project.query
+
+            if args['status']:
+                query = query.filter_by(status=args['status'])
+
+            # Example: Sorting by project start date in ascending order
+            if args['sort'] == 'start_date':
+                query = query.order_by(Project.start_date.asc())
+
+            # Example: Sorting by project status in descending order
+            if args['sort'] == '-status':
+                query = query.order_by(Project.status.desc())
+
+            total_projects = query.count()
+            projects = query.offset(offset).limit(per_page).all()
+
+            return {
+                'projects': marshal(projects, project_fields),
+                'totalPages': (total_projects + per_page - 1) // per_page
+            }, 200
 
     def post(self):
         parser = reqparse.RequestParser()
@@ -218,13 +260,26 @@ class ProjectResource(Resource):
 
 class TaskResource(Resource):
     def get(self, task_id=None):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, location='args')  # Add name as a query parameter
+        parser.add_argument('sort_by_status', type=bool, location='args')  # Add sort_by_status as a query parameter
+        args = parser.parse_args()
+
         if task_id:
             task = Task.query.get(task_id)
             if not task:
                 return {'message': 'Task not found'}, 404
             return marshal(task, task_fields), 200
         else:
-            tasks = Task.query.all()
+            query = Task.query
+
+            if args['name']:
+                query = query.filter(Task.name.ilike(f'%{args["name"]}%'))
+
+            if args['sort_by_status']:
+                query = query.order_by(Task.status)
+
+            tasks = query.all()
             return marshal(tasks, task_fields), 200
 
     def post(self):
