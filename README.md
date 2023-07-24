@@ -9,27 +9,43 @@ Project Prism is a Portfolio Management Application designed to streamline the p
 * Database: MySQL
 
 # Installation and Setup
-1. Clone the repository from GitHub:
+1. Clone the repository from GitHub: <br>
+ ```bash
 git clone https://github.com/SakthivelMadhu/Portfolio_Management_Application.git
-
+```
 3. Backend Setup:<br>
-* Navigate to the backend directory: <br> 
-  cd project_prism/backend
+* Navigate to the backend directory: <br>
+```bash
+cd project_prism/backend
+  ```
 * Install Python dependencies from requirements.txt:  <br>
-  pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 * Run the backend server:  <br>
-  python app.py
-
+```bash
+python app.py
+  ```
+  
 3. Frontend Setup:
 
 * Navigate to the frontend/portfolio-management-app directory: <br>
+```bash
 cd project_prism/frontend/portfolio-management-app
+```
 * Install Node.js dependencies: <br>
+```bash
 npm install
+```
 * Run the frontend React application: <br>
-  npm start
+```bash
+npm start
+```
 4. Access the application at http://localhost:3000/ in your web browser.
 
+
+# Project ER Diagram : <br>
+![Screenshot 2023-07-23 020127](https://github.com/SakthivelMadhu/Portfolio_Management_Application/assets/62326876/b8aa6159-8c00-428a-aaa5-5598c0f86e61)
 
 # Features : 
 ## Portfolio Managers:
